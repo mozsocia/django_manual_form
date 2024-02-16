@@ -1,0 +1,22 @@
+<!-- templates/your_app_name/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Index</title>
+</head>
+<body>
+    <h1>Blog Index</h1>
+    
+    <ul>
+        {% for blog in blogs %}
+            <li>{{ blog.title }} - {{ blog.category.name }} ({{ blog.pub_date|date:"F d, Y H:i" }})</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'create_blog' %}">Create a new blog</a>
+</body>
+</html>
