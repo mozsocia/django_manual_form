@@ -1,0 +1,45 @@
+<!-- create_product.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Create Product</h2>
+
+  <form method="post" action="{% url 'create_product' %}">
+    {% csrf_token %}
+    
+    <label for="name">Name:</label>
+    <input type="text" name="name" required><br>
+
+    <label for="description">Description:</label>
+    <textarea name="description" rows="4"></textarea><br>
+
+    <label for="price">Price:</label>
+    <input type="number" name="price" step="0.01" required><br>
+
+    <div x-data="{ variations: [] }">
+      <label>Variations:</label>
+      <div x-for="(variation, index) in variations" :key="index">
+        <div>
+          <label for="variationName">Name:</label>
+          <input type="text" :name="'variations[' + index + '][name]'" required>
+
+          <label for="variationAdjust">Adjust:</label>
+          <select :name="'variations[' + index + '][adjust]'">
+            <option value="plus">Plus</option>
+            <option value="minus">Minus</option>
+          </select>
+
+          <label for="variationAmount">Amount:</label>
+          <input type="number" :name="'variations[' + index + '][amount]'" required>
+
+          <button type="button" @click="variations.splice(index, 1)">Remove</button>
+        </div>
+      </div>
+
+      <button type="button" @click="variations.push({ name: '', adjust: 'plus', amount: 0 })">Add Variation</button>
+    </div>
+
+    <button type="submit">Create Product</button>
+  </form>
+{% endblock %}
