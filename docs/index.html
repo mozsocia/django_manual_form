@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine.js Variations and Counter Example</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+
+    <div x-data="{ colors: [
+        { name: '1', adjust: 'plus', amount: 10 },
+        { name: '2', adjust: 'plus', amount: 20 },
+        { name: '3', adjust: 'plus', amount: 30 }
+    ] }">
+
+        <div>
+            <div>
+
+                <template x-for="color in colors">
+                    <div>
+                        <button type="button" @click="addVariation">Add Variation</button>
+                        <li x-text="color.amount"></li>
+
+                    </div>
+                </template>
+            </div>
+        </div>
+
+    </div>
+    <script>
+
+        function addVariation() {
+            console.log(this.colors)
+        }
+
+
+    </script>
+</body>
+
+</html>

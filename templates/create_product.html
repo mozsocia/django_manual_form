@@ -3,43 +3,125 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Create Product</h2>
+<h2>Create Product</h2>
 
-  <form method="post" action="{% url 'create_product' %}">
-    {% csrf_token %}
-    
-    <label for="name">Name:</label>
-    <input type="text" name="name" required><br>
+<form class="create-form" method="post" action="{% url 'create_product' %}" x-data="productCreate" @submit.prevent="submitForm">
+  {% csrf_token %}
 
-    <label for="description">Description:</label>
-    <textarea name="description" rows="4"></textarea><br>
+  <label for="cars" class="form-label">Car:</label>
 
-    <label for="price">Price:</label>
-    <input type="number" name="price" step="0.01" required><br>
+  <select name="cars" id="cars" data-trigger class="form-select">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+  </select>
 
-    <div x-data="{ variations: [] }">
-      <label>Variations:</label>
-      <div x-for="(variation, index) in variations" :key="index">
-        <div>
-          <label for="variationName">Name:</label>
-          <input type="text" :name="'variations[' + index + '][name]'" required>
+  <br>
 
-          <label for="variationAdjust">Adjust:</label>
-          <select :name="'variations[' + index + '][adjust]'">
-            <option value="plus">Plus</option>
-            <option value="minus">Minus</option>
-          </select>
+  <label for="name" class="form-label">Name:</label>
+  <input type="text" name="name" x-model="productName" class="form-control"><br>
 
-          <label for="variationAmount">Amount:</label>
-          <input type="number" :name="'variations[' + index + '][amount]'" required>
+  <label for="description" class="form-label">Description:</label>
+  <textarea name="description" rows="4" x-model="productDescription" class="form-control"></textarea><br>
 
-          <button type="button" @click="variations.splice(index, 1)">Remove</button>
-        </div>
-      </div>
+  <label for="price" class="form-label">Price:</label>
+  <input type="number" name="price" step="0.01" x-model="productPrice" class="form-control"><br>
 
-      <button type="button" @click="variations.push({ name: '', adjust: 'plus', amount: 0 })">Add Variation</button>
+  <p><strong>Variations</strong>
+  <p>
+    <input x-model="variationTypeInput" required>
+    <button type="button" @click="addVariationType">Add</button>
+    <br>
+    <template x-for="type in variations.type" :key="type">
+      <li x-text="type"></li>
+    </template>
+  </p>
+  <br>
+
+  <template x-for="(variation, index) in variations.data" :key="index">
+    <div>
+      <label for="variationName">Type:</label>
+      <select :name="'variations[' + index + '][type]'" x-model="variation.type">
+        <template x-for="type in variations.type" :key="type">
+          <option :value="type" x-text="type"></option>
+        </template>
+      </select>
+
+      <label for="variationName">Name:</label>
+      <input type="text" :name="'variations[' + index + '][name]'" x-model="variation.name" required>
+
+      <label for="variationAdjust">Adjust:</label>
+      <select :name="'variations[' + index + '][adjust]'" x-model="variation.adjust">
+        <option value="plus">Plus</option>
+        <option value="minus">Minus</option>
+      </select>
+
+      <label for="variationAmount">Amount:</label>
+      <input type="number" :name="'variations[' + index + '][amount]'" x-model="variation.amount" required>
+
+      <button type="button" @click="removeVariation(index)">Remove</button>
+
     </div>
+  </template>
 
-    <button type="submit">Create Product</button>
-  </form>
+  <button type="button" @click="addVariation">Add Variation</button>
+
+  <button type="submit">Create Product</button>
+</form>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('productCreate', () => ({
+      productName: '',
+      productDescription: '',
+      productPrice: 0,
+      variationTypeInput: "",
+      variations: {
+        type: ['color', 'size'],
+        data: [{ name: '1', adjust: 'plus', amount: 10 }]
+      },
+
+
+      addVariationType() {
+        this.variations.type.push(this.variationTypeInput)
+      },
+
+      toggle() {
+        this.open = !this.open
+      },
+      submitForm() {
+        console.log({
+          name: this.productName,
+          description: this.productDescription,
+          price: this.productPrice,
+          variations: this.variations,
+        });
+        const formData = new FormData(event.target);
+        const formObject = {};
+        formData.forEach((value, key) => {
+          formObject[key] = value;
+        });
+
+        console.log({
+          ...formObject,
+        });
+        // Uncomment the line below if you want to submit the form after logging
+        // document.querySelector('form').submit();
+      },
+
+      addVariation() {
+        console.log(this.variations)
+
+        this.variations.data.push({ name: '', adjust: 'plus', amount: 0, type: '' });
+      },
+
+      removeVariation(index) {
+        console.log(this.variations)
+        this.variations.data.splice(index, 1);
+      }
+    }))
+  })
+
+</script>
 {% endblock %}

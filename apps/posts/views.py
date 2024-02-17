@@ -4,7 +4,7 @@ from .forms import *
 
 def index(request):
     products = Product.objects.all()
-    return render(request, 'index.html', {'products': products})
+    return render(request, 'prac.html', {'products': products})
 
 def create_product(request):
     if request.method == 'POST':

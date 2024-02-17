@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine.js Variations Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+</head>
+<body>
+    <div x-data="{ variations: [
+      { name: '1', adjust: 'plus', amount: 10 },
+      { name: '2', adjust: 'plus', amount: 20 },
+      { name: '3', adjust: 'plus', amount: 30 }
+    ] }">
+        <div x-for="variation in variations" :key="variation.name">
+            <p>
+                Name: <span x-text="variation.name"></span><br>
+                Adjust: <span x-text="variation.adjust"></span><br>
+                Amount: <span x-text="variation.amount"></span>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
