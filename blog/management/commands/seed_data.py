@@ -1,7 +1,7 @@
 import random
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from apps.posts.models import Category, Blog
+from blog.models import *
 
 class Command(BaseCommand):
     help = 'Seed data for Blog and Category models'
