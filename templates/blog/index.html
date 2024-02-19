@@ -13,7 +13,16 @@
     
     <ul>
         {% for blog in blogs %}
-            <li>{{ blog.title }} - {{ blog.category.name }} ({{ blog.pub_date|date:"F d, Y H:i" }})</li>
+            <li>
+                <strong>Title:</strong> <a href="{% url 'edit_blog' blog.id %}">{{ blog.title }}</a><br>
+                <strong>Category:</strong> {{ blog.category.name }}<br>
+                <strong>Published Date:</strong> {{ blog.pub_date|date:"F d, Y H:i" }}<br>
+                {% if blog.image %}
+                    <img src="{{ blog.image.url }}" alt="{{ blog.title }} Image" style="max-width: 200px;"><br>
+                {% endif %}
+                <strong>Active:</strong> {% if blog.is_active %}Yes{% else %}No{% endif %}<br>
+            </li>
+            <br>
         {% endfor %}
     </ul>
 

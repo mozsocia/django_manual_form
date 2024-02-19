@@ -14,6 +14,8 @@ class Blog(models.Model):
     content = models.TextField()
     pub_date = models.DateTimeField('date published')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='blog_images/', blank=True, null=True)  # Added image field
+    is_active = models.BooleanField(default=True)  # Added is_active field
 
     def __str__(self):
         return self.title

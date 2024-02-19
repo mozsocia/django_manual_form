@@ -11,7 +11,7 @@
 <body>
     <h1>Create a new blog</h1>
 
-    <form method="post" action="{% url 'create_blog' %}">
+    <form method="post" action="{% url 'create_blog' %}" enctype="multipart/form-data"> <!-- Added enctype for image -->
         {% csrf_token %}
 
         <label for="id_title">Title:</label>
@@ -26,6 +26,14 @@
         <textarea name="content" id="id_content" >{{ form.content.value|default:'' }}</textarea>
         {% if form.content.errors %}
             <span class="error">{{ form.content.errors.0 }}</span>
+        {% endif %}
+
+        <br>
+
+        <label for="id_image">Image:</label>
+        <input type="file" name="image" id="id_image"> <!-- Added input field for image -->
+        {% if form.image.errors %}
+            <span class="error">{{ form.image.errors.0 }}</span>
         {% endif %}
 
         <br>
@@ -46,8 +54,13 @@
 
         <br>
 
+        <label for="id_is_active">Active:</label> <!-- Added is_active field -->
+        <input type="checkbox" name="is_active" id="id_is_active" {% if form.is_active.value %}checked{% endif %}>
+        <br>
+
         <button type="submit">Save</button>
     </form>
+
 
     <a href="{% url 'index' %}">Back to index</a>
 </body>
