@@ -102,3 +102,43 @@ def post_destroy(request, post_id):
     post.delete()
     return redirect('post-index')
 ```
+
+```html
+<form method="post" action="{% url 'create_blog' %}">
+        {% csrf_token %}
+
+        <label for="id_title">Title:</label>
+        <input type="text" name="title" id="id_title" value="{{ form.title.value|default:'' }}" >
+        {% if form.title.errors %}
+            <span class="error">{{ form.title.errors.0 }}</span>
+        {% endif %}
+
+        <br>
+
+        <label for="id_content">Content:</label>
+        <textarea name="content" id="id_content" >{{ form.content.value|default:'' }}</textarea>
+        {% if form.content.errors %}
+            <span class="error">{{ form.content.errors.0 }}</span>
+        {% endif %}
+
+        <br>
+
+        <label for="id_category">Category:</label>
+        <select name="category" id="id_category" >
+            {% for category_value, category_label in form.category.field.choices %}
+                <option value="{{ category_value }}" 
+                {% if form.category.value|stringformat:"s" == category_value|stringformat:"s" %}selected{% endif %}
+                >
+                    {{ category_label }}
+                </option>
+            {% endfor %}
+        </select>
+        {% if form.category.errors %}
+            <span class="error">{{ form.category.errors.0 }}</span>
+        {% endif %}
+
+        <br>
+
+        <button type="submit">Save</button>
+    </form>
+```
